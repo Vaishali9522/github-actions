@@ -1,47 +1,36 @@
 name: Mixed inputs
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        type: choice
-        description: Who to greet
-        options: 
-        - monalisa
-        - cschleiden
-      message:
-        required: true
-      message2:
-        required: true
-        default: helloooo
-      message3:
-        required: true
-        default: world
-      message4:
-        required: true
-        default: bye
-      message5:
-        required: true
-        default: world
-      message6:
-        required: true
-        default: another message
-      message7:
-        required: true
-      message8:
-        required: true
-        default: helloooo
-      use-emoji:
-        type: boolean
-        description: Include 🎉🤣 emojis
-      environment:
-        type: environment
+  workflow_dispatch
 
 jobs:
   greet:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Read YAML file
+      id: read-yaml
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const yaml = require('js-yaml');
+
+          const yamlFilePath = './input.yaml';  // Hardcoded path
+          const fileContents = fs.readFileSync(yamlFilePath, 'utf8');
+          const data = yaml.load(fileContents);
+
+          console.log(JSON.stringify(data));
+
+          // Set outputs for subsequent steps
+          return {
+            name: data.name,
+            message: data.message,
+            use-emoji: data.use-emoji,
+            environment: data.environment
+          }
+
     - name: Send greeting
-      run:  |
-        echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+      run: |
+        echo "${{ steps.read-yaml.outputs.message }} ${{ if steps.read-yaml.outputs.use-emoji == 'true' }}🥳{{ endif }} ${{ steps.read-yaml.outputs.name }}"
