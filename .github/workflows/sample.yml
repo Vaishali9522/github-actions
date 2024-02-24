@@ -23,3 +23,13 @@ jobs:
     - name: Send greeting
       run: |
         echo "${{ env.message }} ${{ env.name }}"
+
+    - name: Call API
+      run: |
+        curl -X POST \
+          -H "Content-Type: application/json"; charset=UTF-8' \
+          -d '{"title": "${{ env.name }}", "body": "${{ env.message }}", "userId": 1}' \
+          https://jsonplaceholder.typicode.com/posts \
+          -w "%{http_code}" \
+          -s)
+        echo "API Response: $response"
