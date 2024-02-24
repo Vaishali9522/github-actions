@@ -14,7 +14,7 @@ jobs:
     - name: Read JSON file
       id: read-json
       run: |
-        cat input.json  # Display contents of the input.json file for verification
+        cat inputs.json  # Display contents of the input.json file for verification
         echo "::set-output name=data::$(cat inputs.json | jq -r '.')"
       shell: bash
       
