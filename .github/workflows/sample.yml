@@ -33,4 +33,4 @@ jobs:
 
     - name: Send greeting
       run: |
-        echo "${{ steps.read-yaml.outputs.message }} ${{ if steps.read-yaml.outputs.use-emoji == 'true' }}🥳{{ endif }} ${{ steps.read-yaml.outputs.name }}"
+        echo "${{ steps.read-yaml.outputs.message }} ${{ steps.read-yaml.outputs.name }}"
