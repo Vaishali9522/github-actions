@@ -8,28 +8,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Read YAML file
-      id: read-yaml
-      uses: actions/github-script@v4
-      with:
-        script: |
-          const fs = require('fs');
-          const yaml = require('js-yaml');
-          
-          const yamlFilePath = './input.yaml';  // Hardcoded path
-          const fileContents = fs.readFileSync(yamlFilePath, 'utf8');
-          const data = yaml.load(fileContents);
-
-          console.log(JSON.stringify(data));
-
-          // Set outputs for subsequent steps
-          return {
-            name: data.name,
-            message: data.message,
-            use-emoji: data.useEmoji,
-            environment: data.environment
-          }
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Read JSON file
+      id: read-json
+      run: |
+        cat input.json  # Display contents of the input.json file for verification
+        echo "::set-output name=data::$(cat input.json | jq -r '.')"
+      shell: bash
+      
+    - name: Set outputs
+      id: set-outputs
+      run: |
+        echo "::set-output name=name::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.name')"
+        echo "::set-output name=message::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.message')"
+        echo "::set-output name=use-emoji::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.use-emoji')"
+        echo "::set-output name=environment::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.environment')"
+      shell: bash
 
     - name: Send greeting
       run: |
-        echo "${{ steps.read-yaml.outputs.message }} ${{ steps.read-yaml.outputs.name }}"
+        echo "${{ steps.set-outputs.outputs.message }} ${{ steps.set-outputs.outputs.name }}"
