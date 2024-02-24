@@ -14,19 +14,12 @@ jobs:
     - name: Read JSON file
       id: read-json
       run: |
-        cat inputs.json  # Display contents of the input.json file for verification
-        echo "::set-output name=data::$(cat inputs.json | jq -r '.')"
-      shell: bash
-      
-    - name: Set outputs
-      id: set-outputs
-      run: |
-        echo "::set-output name=name::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.name')"
-        echo "::set-output name=message::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.message')"
-        echo "::set-output name=use-emoji::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.use-emoji')"
-        echo "::set-output name=environment::$(echo '${{ steps.read-json.outputs.data }}' | jq -r '.environment')"
-      shell: bash
+        cat input.json  # Display contents of the input.json file for verification
+        echo "name=$(jq -r '.name' input.json)" >> $GITHUB_ENV
+        echo "message=$(jq -r '.message' input.json)" >> $GITHUB_ENV
+        echo "use_emoji=$(jq -r '.\"use-emoji\"' input.json)" >> $GITHUB_ENV
+        echo "environment=$(jq -r '.environment' input.json)" >> $GITHUB_ENV
 
     - name: Send greeting
       run: |
-        echo "${{ steps.set-outputs.outputs.message }} ${{ steps.set-outputs.outputs.name }}"
+        echo "${{ env.message }} ${{ env.name }}"
