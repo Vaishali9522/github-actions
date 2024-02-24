@@ -11,6 +11,26 @@ on:
         - cschleiden
       message:
         required: true
+      message2:
+        required: true
+        default: helloooo
+      message3:
+        required: true
+        default: world
+      message4:
+        required: true
+        default: bye
+      message5:
+        required: true
+        default: world
+      message6:
+        required: true
+        default: another message
+      message7:
+        required: true
+      message8:
+        required: true
+        default: helloooo
       use-emoji:
         type: boolean
         description: Include 🎉🤣 emojis
