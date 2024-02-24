@@ -27,7 +27,7 @@ jobs:
           return {
             name: data.name,
             message: data.message,
-            use-emoji: data.use-emoji,
+            use-emoji: data.useEmoji,
             environment: data.environment
           }
 
