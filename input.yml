@@ -1,0 +1,5 @@
+name: monalisa
+message: Hello Monalisa
+use-emoji: true
+environment: production
+# Add more parameters as needed
