@@ -1,5 +1,5 @@
 name: monalisa
 message: Hello Monalisa
-use-emoji: true
+useEmoji: true
 environment: production
 # Add more parameters as needed
